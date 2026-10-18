@@ -1,6 +1,7 @@
-from .Command import Command
 from Config import getCommandName, getSetting
-from Util import parseSearchQuery, parsePlaylists
+from Util import parse_items, parseSearchQuery
+
+from .Command import Command
 
 
 class MyPlaylist(Command):
@@ -9,10 +10,13 @@ class MyPlaylist(Command):
 
     def Match(self, query: str):
         query, page = parseSearchQuery(query)
-        playlistOffset = int(getSetting("MAX_RESULTS")) * (page - 1)
+        offset = int(getSetting("MAX_RESULTS")) * (page - 1)
         playlists = self.spotify.current_user_playlists(
-            limit=int(getSetting("MAX_RESULTS")), offset=playlistOffset)
-        return parsePlaylists(playlists)
+            limit=int(getSetting("MAX_RESULTS")), offset=offset
+        )
+        return parse_items(
+            playlists["items"], lambda p: p["name"], "No playlists found!"
+        )
 
     def Run(self, data: str):
         raise NotImplementedError

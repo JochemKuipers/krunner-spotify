@@ -1,5 +1,6 @@
-from .Command import Command
 from Config import getCommandName
+
+from .Command import Command
 
 
 class Resume(Command):

@@ -1,6 +1,8 @@
-from .Command import Command
-from Config import getCommandName, getSetting
 import os
+
+from Config import getCommandName, getSetting
+
+from .Command import Command
 
 
 class Login(Command):
@@ -11,8 +13,17 @@ class Login(Command):
             pass
 
     def Match(self, query: str):
-        if(not os.path.isfile(getSetting("CACHE_PATH"))):
-            return [(getCommandName("LOGIN_COMMAND"), "Log into Spotify", "Spotify", 100, 100, {})]
+        if not os.path.isfile(getSetting("CACHE_PATH")):
+            return [
+                (
+                    getCommandName("LOGIN_COMMAND"),
+                    "Log into Spotify",
+                    "Spotify",
+                    100,
+                    100,
+                    {},
+                )
+            ]
         else:
             return [("", "Already logged in", "Spotify", 100, 100, {})]
 

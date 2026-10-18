@@ -1,5 +1,6 @@
-from .Command import Command
 from Config import getCommandName
+
+from .Command import Command
 
 
 class Next(Command):
@@ -7,7 +8,9 @@ class Next(Command):
         super().__init__(getCommandName("NEXT_COMMAND"), spotify)
 
     def Match(self, query: str):
-        return [(self.command, "Skip current track", "Spotify", 100, 100, {}), ]
+        return [
+            (self.command, "Skip current track", "Spotify", 100, 100, {}),
+        ]
 
     def Run(self, data: str):
         self.spotify.next_track()

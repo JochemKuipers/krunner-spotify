@@ -182,7 +182,6 @@ The `Pause` command can be used to pause the current track.
 
 The `Play` command can be used to play for example a playlist or track. To be able to use the `Play` command a `sub-command` has to be supplied. The supported `subcommands` are the following:
 
-* `Play` [featured](##Featured)
 * `Play` [myplaylist](##my-playlist)
 * `Play` [playlist](##playlist)
 * `Play` [artist](##artist)
@@ -359,28 +358,6 @@ depends on the type of track being played. The following two types with the foll
 <!-- ----------------------------------------------------------------- -->
 
 # Sub-Commands
-
-## Featured
-
-The `featured` `sub-command` can be used in combination with the `Play` command. When the feature `sub-command` is supplied after the `Play` command featured playlists are shown. The featured `sub-command` takes one optional argument:
-
-* Page number, show pages containing more results by entering: p{$_pagenumber}. (**Optional**)  
-
-### **Examples**:<br>
-
-The following `query` can be used to show the featured playlists. After selecting a playlist, it will be played.
-
-```
-Play featured
-```
-
-The following `query` can be used to show the second page with featured playlists. After selecting a playlist, it will be played.
-
-```
-Play featured p2
-```
-
-<br>
 
 ## My playlist
 

@@ -1,5 +1,7 @@
-from .Command import Command
 from Config import getCommandName
+
+from .Command import Command
+
 
 class Shuffle(Command):
     def __init__(self, spotify):
@@ -8,9 +10,11 @@ class Shuffle(Command):
     def Match(self, query: str):
         currentPlayback = self.spotify.current_playback()
         state = "Enable"
-        if(currentPlayback["shuffle_state"]):
+        if currentPlayback["shuffle_state"]:
             state = "Disable"
-        return [(self.command + " " + state, state + " shuffle", "Spotify", 100, 100, {})]
+        return [
+            (self.command + " " + state, state + " shuffle", "Spotify", 100, 100, {})
+        ]
 
     def Run(self, data: str):
         self.spotify.shuffle(data == "Enable")

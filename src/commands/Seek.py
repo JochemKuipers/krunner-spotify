@@ -1,5 +1,7 @@
-from .Command import Command
 from Config import getCommandName
+from Util import parse_duration_seconds
+
+from .Command import Command
 
 
 class Seek(Command):
@@ -7,17 +9,18 @@ class Seek(Command):
         super().__init__(getCommandName("SEEK_COMMAND"), spotify)
 
     def Match(self, query: str):
-        query = query.strip(" ")
-        time = query.split(":")
-        if all(x.isnumeric() for x in time):
-            if len(time) == 1:
-                return [(self.command + " " + time[0], "Seek: " + time[0] + " sec", "Spotify", 100, 100, {})]
-            if len(time) == 2:
-                return [(self.command + " " + str(60*int(time[0]) + int(time[1])), "Seek: " + time[0] + " min " + time[1] + " sec", "Spotify", 100, 100, {})]
-            if len(time) == 3:
-                return [(self.command + " " + str(60*60 * int(time[0]) + 60*int(time[1]) + int(time[2])), "Seek: " + time[0] + " hr " + time[1] + " min " + time[2] + " sec", "Spotify", 100, 100, {})]
-        else:
+        seconds = parse_duration_seconds(query)
+        if seconds is None:
             return [("", "Invalid input.", "Spotify", 100, 100, {})]
+        raw = query.strip(" ")
+        parts = raw.split(":")
+        if len(parts) == 1:
+            desc = f"Seek: {parts[0]} sec"
+        elif len(parts) == 2:
+            desc = f"Seek: {parts[0]} min {parts[1]} sec"
+        else:
+            desc = f"Seek: {parts[0]} hr {parts[1]} min {parts[2]} sec"
+        return [(self.command + " " + str(seconds), desc, "Spotify", 100, 100, {})]
 
     def Run(self, data: str):
         self.spotify.seek_track(int(data) * 1000)

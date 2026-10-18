@@ -1,6 +1,8 @@
-from .Command import Command
 from Config import getCommandName, getSetting
-from Util import parseSearchQuery, parseTracks
+from Util import parse_items, parseSearchQuery
+
+from .Command import Command
+
 
 class ArtistSong(Command):
     def __init__(self, spotify):
@@ -8,18 +10,20 @@ class ArtistSong(Command):
 
     def Match(self, query: str):
         query, page = parseSearchQuery(query)
-        searchResults = []
-        if(query != ""):
-            query = "artist:" + query
-            trackOffset = int(getSetting("MAX_RESULTS")) * (page - 1)
-            searchResults = self.spotify.search(query, int(
-                getSetting("MAX_RESULTS")), trackOffset, "track")
+        if query != "":
+            offset = int(getSetting("MAX_RESULTS")) * (page - 1)
+            searchResults = self.spotify.search(
+                "artist:" + query, int(getSetting("MAX_RESULTS")), offset, "track"
+            )
         else:
-            topArtist = self.spotify.current_user_top_artists(limit = 1)
-            result = self.spotify.artist_top_tracks(topArtist['items'][0]['id'])
-            searchResults = {"tracks": {"items" : result["tracks"]}}
-
-        return parseTracks(searchResults)
+            topArtist = self.spotify.current_user_top_artists(limit=1)
+            result = self.spotify.artist_top_tracks(topArtist["items"][0]["id"])
+            searchResults = {"tracks": {"items": result["tracks"]}}
+        return parse_items(
+            searchResults["tracks"]["items"],
+            lambda t: t["name"] + " - " + t["album"]["artists"][0]["name"],
+            "No tracks found!",
+        )
 
     def Run(self, data: str):
         raise NotImplementedError
