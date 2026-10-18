@@ -14,8 +14,21 @@ Control [Spotify](https://www.spotify.com/) directly from [KRunner](https://gith
 
 * [Python 3](https://www.python.org/download/releases/3.0/)
 * [Pip 3](https://pip.pypa.io/en/stable/)
-* [Spotipy](https://spotipy.readthedocs.io/) (minimum version 2.14.0)
+* [Spotipy](https://spotipy.readthedocs.io/) (minimum version 2.14.0) — installed into the project venv by `install.sh`
+* Native bindings for D-Bus and GLib (prefer distro packages; PyGObject has no Linux wheels on PyPI):
+  * Debian/Ubuntu/PikaOS: `python3-gi python3-dbus`
+  * Fedora: `python3-gobject python3-dbus`
+  * Arch: `python-gobject python-dbus`
+  * openSUSE: `python3-gobject python3-dbus-python`
 * KDE Plasma with KRunner
+
+If those runtime packages are missing, `install.sh` checks for build headers and can compile `dbus-python` / `PyGObject` from pip instead. On Debian/Ubuntu/PikaOS that means:
+
+```sh
+sudo apt install gcc pkg-config python3-dev libcairo2-dev libgirepository-2.0-dev libdbus-1-dev
+```
+
+The installer exits early with package suggestions if neither path is available, instead of failing deep inside Meson.
 
 ## Installation
 
@@ -26,13 +39,16 @@ git clone https://github.com/JochemKuipers/krunner-spotify
 cd krunner-spotify
 ```
 
-2. Run the install script:
+2. Install runtime packages (recommended), then run the install script:
 
 ```sh
+# Debian/Ubuntu/PikaOS example
+sudo apt install python3-gi python3-dbus
+
 sh install.sh
 ```
 
-The installer will create a virtual environment and install all required dependencies automatically.
+The installer creates a virtual environment with access to system site-packages, uses distro `dbus` / `gi` when present, and installs Spotipy automatically.
 
 3. **Configure KRunner Priority (Recommended)**:
    * Open KRunner settings (search for "KRunner" in System Settings)

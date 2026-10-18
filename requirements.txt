@@ -1,3 +1,1 @@
 spotipy
-dbus-python
-PyGObject
