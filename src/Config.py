@@ -7,6 +7,10 @@ CONFIG_FILE_LOCATION = (
 
 
 def loadConfig():
+    if not os.path.isfile(CONFIG_FILE_LOCATION):
+        raise SystemExit(
+            f"Config not found: {CONFIG_FILE_LOCATION}\nRun install.sh first."
+        )
     config.read(CONFIG_FILE_LOCATION)
     config["Settings"]["CACHE_PATH"] = os.path.expanduser(
         config["Settings"]["CACHE_PATH"]

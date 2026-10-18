@@ -6,6 +6,12 @@ if [ ! -d ".venv" ]; then
     exit 1
 fi
 
+# Seed config if missing (do not overwrite an existing one)
+if [ ! -f "$HOME/.config/KRunner-Spotify/KRunner-Spotify.config" ]; then
+    mkdir -p "$HOME/.config/KRunner-Spotify"
+    cp KRunner-Spotify.config "$HOME/.config/KRunner-Spotify/"
+fi
+
 echo "Stopping existing KRunner and plugin processes..."
 pkill -9 -f KRunnerSpotify.py 2>/dev/null || true
 kquitapp6 krunner 2>/dev/null || true
