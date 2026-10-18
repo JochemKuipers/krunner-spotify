@@ -55,7 +55,7 @@ class Runner(dbus.service.Object):
         try:
             if getSetting("CASE_SENSITIVE") == "False":
                 command = command.upper()
-            return Commands.executeCommand(command, self.spotify).Match(arguments)
+            return Commands.executeCommand(command, self.spotify).Match(arguments) or []
         except RuntimeError as e:
             if str(e) == "Not logged in!":
                 return [
@@ -68,6 +68,7 @@ class Runner(dbus.service.Object):
                         {},
                     )
                 ]
+            return []
 
     def _run_impl(self, data: str, action_id: str):
         # If data is a Spotify URI (from search results), handle it directly
